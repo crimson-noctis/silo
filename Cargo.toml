@@ -1,8 +1,7 @@
 [workspace]
 members = [
   "silo-core",
-  "silo-server",
-  "silo-desktop",
+  "silo-app/src-tauri"
 ]
 
 resolver = "3"
