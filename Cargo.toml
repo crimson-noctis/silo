@@ -1,36 +1,8 @@
-[package]
-name = "silo"
-version = "0.1.0"
-edition = "2024"
+[workspace]
+members = [
+  "silo-core",
+  "silo-server",
+  "silo-desktop",
+]
 
-[dependencies]
-# Web Server
-actix-web = "4.12.1"
-serde = { version = "1.0.228", features = ["derive"] }
-serde_json = "1.0.149"
-jsonwebtoken = "10.3.0"
-
-# PDF / DOCX / Excel
-calamine = "0.33.0"
-lopdf = "0.39.0"
-
-# Text Processing
-regex = "1.12.3"
-textwrap = "0.16.2"
-
-# Embeddings / LLM
-rust-bert = "0.23.0"
-
-# Vector Search
-qdrant-client = "1.16.0"
-faiss = "0.13.0"
-
-# Text Search / Hybrid
-tantivy = "0.25.0"
-
-# Storage / DB
-rusqlite = { version = "0.38.0", features = ["bundled"] }
-sled = "0.34.7"
-
-# Error Management
-thiserror = "2.0.18"
+resolver = "3"

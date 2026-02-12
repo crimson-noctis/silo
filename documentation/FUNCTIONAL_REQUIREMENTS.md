@@ -1,7 +1,7 @@
 # Functional Requirements
 
 ## 1 Purpose
-Provide council/admin staff with a secure, centralized, offline system to search and retrieve relevant case documents, spreadsheets, and financial information. The system will eliminate manual cross-referencing, reduce, errors, and allow fast answers to queries. 
+Provide a secure, centralized, offline system to search and retrieve relevant case documents, spreadsheets, and financial information. The system will eliminate manual cross-referencing, reduce, errors, and allow fast answers to queries. 
 
 ## 2 Scope
 **Ingest & Index**
@@ -22,8 +22,6 @@ PDFs, DOCX, Excel Spreadsheet, CSVs and Case Notes.
 | Admin / Staff | Search all documents, view fund information, summarize cases. |
 | Manager / Supervisor | All Admin permissions + configure system, manage users |
 | Developer / IT | Full access for maintenance, ingestion and development. |
-
-
 
 ## 4 Functional Requirements
 
@@ -89,7 +87,7 @@ PDFs, DOCX, Excel Spreadsheet, CSVs and Case Notes.
 ### 4.6 Error Handling
 -   System must log all errors consistently.
     
--   Use centralized error enum (`CouncilSearchError`) to:
+-   Use centralized error enum to:
     
     -   Capture file errors (missing or unreadable).
         
@@ -147,6 +145,6 @@ PDFs, DOCX, Excel Spreadsheet, CSVs and Case Notes.
 ### Future Enhancements
 -   Advanced NLP reasoning for ambiguous cases.
     
--   Integration with structured databases or council ERP systems.
+-   Integration with structured databases or ERP systems.
     
 -   Automatic update / ingestion of daily spreadsheets.
