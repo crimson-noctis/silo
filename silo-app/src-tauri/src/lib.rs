@@ -1,7 +1,11 @@
-// Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
+use silo_core;
+
 #[tauri::command]
 fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
+    format!(
+        "Hello, {}! You've been greeted from Rust! Notification that you are Connected to Backend: {}",
+        name, silo_core::hello_core()
+    )
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
