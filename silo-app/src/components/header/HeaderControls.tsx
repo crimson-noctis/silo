@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Upload, Search } from 'lucide-react';
-import { UploadCard } from '@/components/Upload';
+import { UploadCard } from '@/components/UploadCard';
 
 interface HeaderControlsProps {
   onSearch: (query: string) => Promise<void>;

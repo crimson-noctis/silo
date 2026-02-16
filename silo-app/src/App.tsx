@@ -1,21 +1,37 @@
 import './App.css';
+import { useEffect, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { HeaderControls } from '@/components/HeaderControls';
-import { useState } from 'react';
+import { HeaderControls } from '@/components/header/HeaderControls';
+import { useSearchStore } from '@/store/useSearchStore';
+import { invoke } from '@tauri-apps/api/core';
 
 function App() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [searchResults, setSearchResults] = useState<string | null>(null);
+  const { isLoading, searchResults, setLoading, setResults } = useSearchStore();
+  const [tauriMessage, setTauriMessage] = useState<string | null>(null);
 
-  // This will be passed to HeaderControls
+  // Fetch Tauri greet message on load
+  useEffect(() => {
+    const fetchGreet = async () => {
+      try {
+        const response = await invoke<string>('greet', { name: 'User' });
+        setTauriMessage(response);
+      } catch (err) {
+        console.error('Tauri greet failed:', err);
+        setTauriMessage('Failed to fetch message');
+      }
+    };
+
+    fetchGreet();
+  }, []);
+
   const handleSearch = async (query: string) => {
-    setIsLoading(true);
+    setLoading(true);
     try {
       // Simulate search delay
       await new Promise((resolve) => setTimeout(resolve, 5000));
-      setSearchResults(query ? `Results for "${query}"` : null);
+      setResults(query ? `Results for "${query}"` : null);
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
@@ -32,15 +48,10 @@ function App() {
       <HeaderControls onSearch={handleSearch} onUpload={handleUpload} />
 
       {/* Results / Skeleton Grid */}
-
-      
-      {/* Results / Skeleton Grid */}
       <div className="max-w-6xl mx-auto mt-6 px-4">
         <div
           className="grid gap-6"
-          style={{
-            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-          }}
+          style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))' }}
         >
           {isLoading
             ? Array.from({ length: 100 }).map((_, i) => (
@@ -54,7 +65,7 @@ function App() {
               ))
             : (
               <div className="col-span-full text-center py-10 text-muted-foreground">
-                {searchResults ?? 'Ready to Search.'}
+                {searchResults ?? tauriMessage ?? 'Loading Tauri...'}
               </div>
             )}
         </div>

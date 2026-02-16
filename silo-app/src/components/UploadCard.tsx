@@ -1,4 +1,7 @@
 import React from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,15 +14,34 @@ interface UploadCardProps {
   onUpload?: (file: File) => void;
 }
 
+const uploadSchema = z.object({
+  file: z
+    .instanceof(FileList)
+    .refine(files => files.length === 1, 'Please select a file')
+    .refine(
+      files =>
+        ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/csv', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'].includes(
+          files[0]?.type
+        ),
+      'Unsupported file type'
+    ),
+});
+
+type UploadFormData = z.infer<typeof uploadSchema>;
+
 export const UploadCard: React.FC<UploadCardProps> = ({ show, onClose, onUpload }) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<UploadFormData>({
+    resolver: zodResolver(uploadSchema),
+  });
+
   if (!show) return null;
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const target = e.target as typeof e.target & {
-      'file-1': { files: FileList };
-    };
-    const file = target['file-1'].files?.[0];
+  const onSubmit = (data: UploadFormData) => {
+    const file = data.file[0];
     if (file && onUpload) onUpload(file);
     onClose();
   };
@@ -37,18 +59,21 @@ export const UploadCard: React.FC<UploadCardProps> = ({ show, onClose, onUpload 
           </Button>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="file-1">
+                <Label htmlFor="file">
                   Upload file <span className="text-destructive">*</span>
                 </Label>
                 <Input
-                  id="file-1"
+                  id="file"
                   type="file"
                   accept=".csv, .xlsx, .xls, .docx, .pdf"
-                  required
+                  {...register('file')}
                 />
+                {errors.file && (
+                  <p className="text-sm text-destructive">{errors.file.message}</p>
+                )}
                 <p className="text-sm text-muted-foreground">
                   Supported: DOCX, PDF, CSV, XLSX or XLS.
                 </p>
