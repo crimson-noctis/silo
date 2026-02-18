@@ -13,7 +13,7 @@ function App() {
   useEffect(() => {
     const fetchGreet = async () => {
       try {
-        const response = await invoke<string>('greet', { name: 'User' });
+        const response = await invoke<string>('search_qdrant_collection');
         setTauriMessage(response);
       } catch (err) {
         console.error('Tauri greet failed:', err);

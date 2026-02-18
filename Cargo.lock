@@ -4369,6 +4369,8 @@ dependencies = [
  "lopdf",
  "qdrant-client",
  "regex",
+ "serde",
+ "serde_json",
  "tantivy",
  "textwrap",
  "thiserror 2.0.18",
